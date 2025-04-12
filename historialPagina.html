@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Ventas</title>
+    <link rel="stylesheet" href="styleHistorial.css">
+</head>
+<body>
+    <header class="headerEstilo">
+        <p class="textoUno">Historial de Ventas</p>
+        <div class="contenedorLogo">
+            <img src="https://cdn-icons-png.flaticon.com/512/205/205164.png" alt="agaveLogo" class="logoEstilo">
+        </div>
+        <div class="contenedorBoton">
+            <a href="tablaProducto.html"><button class="botonDis">Productos</button></a>
+            <a href="registroPagina.html"><button class="botonDis">Registrar</button></a>
+            <a href="menuPrincipal.html"><button class="botonDis">Regresar</button></a>
+        </div>
+    </header>
+
+    <div class="contenedor">
+        <div class="lista-container">
+            <ul id="listaVentas"></ul>
+        </div>
+    </div>
+
+    <script>
+        const listaVentas = document.getElementById("listaVentas");
+
+        function mostrarVentas() {
+            const ventas = JSON.parse(localStorage.getItem("ventas")) || [];
+
+            if (ventas.length === 0) {
+                listaVentas.innerHTML = "<li>No hay ventas registradas.</li>";
+                return;
+            }
+
+            ventas.forEach((venta, index) => {
+                const item = document.createElement("li");
+                item.innerHTML = `
+                    <strong>Venta #${index + 1}</strong><br>
+                    Producto: ${venta.producto}<br>
+                    Precio unitario: $${parseFloat(venta.precioUnitario).toFixed(2)} MXN<br>
+                    Cantidad: ${venta.cantidad}<br>
+                    Precio total: $${parseFloat(venta.total).toFixed(2)} MXN<br>
+                    Comprador: ${venta.comprador}
+                    <hr>
+                `;
+                listaVentas.appendChild(item);
+            });
+        }
+
+        mostrarVentas();
+    </script>
+</body>
+</html>

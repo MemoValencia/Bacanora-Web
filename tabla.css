@@ -1,0 +1,195 @@
+body {
+    position: relative; 
+    min-height: 90vh;  
+    background: url(https://barman.news/wp-content/uploads/2023/06/shutterstock_1871957842-2-scaled.webp);
+    margin: 0;
+    padding: 0;
+    background-repeat: no-repeat;
+    background-size: cover; 
+    background-attachment: fixed; 
+    background-position: center top;
+    font-family: Arial, sans-serif;
+}
+
+
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+table, th, td {
+    border: 1px solid black;
+    background-color: rgba(129, 129, 129, 0.5);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #0b6b3e;
+}
+
+form {
+    width: 80%;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+input, select, button {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 5px;
+    border: 1px solid #333;
+    background-color: rgba(63, 63, 63, 0.733);
+    backdrop-filter: blur(3px);
+    color: white;
+    outline: none;
+}
+
+input::placeholder{
+    color: white;
+}
+
+
+.fila-tipos {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.btn-eliminar {
+    background-color: rgba(63, 63, 63, 0.548);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all ease 0.3s;
+
+}
+
+.btn-eliminar:hover {
+    background-color: #0b6b3edc;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+}
+
+.btn-editar{
+    background-color: rgba(63, 63, 63, 0.548);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all ease 0.3s;
+
+}
+
+.btn-editar:hover{
+    background-color: #0b6b3edc;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+    
+}
+
+form {
+    margin-top: 70px; /* Empuja el formulario hacia abajo */
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.campo-formulario {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.mensaje-error {
+    color: rgb(255, 72, 0);
+    font-size: 0.85em;
+    margin-top: 4px;
+    display: none; /* Se muestra solo cuando hay error */
+}
+
+
+
+/*todo aqui abajo es para el header*/
+
+.contenedorBoton {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+
+}
+
+.botonDis {
+    position: relative;
+    padding: 7px;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: rgba(63, 63, 63, 0.548);
+    color: white;
+    border: solid 1px rgb(0, 0, 0);
+    cursor: pointer;
+    transition: all ease 0.3s;
+    margin: 10px;
+
+
+
+}
+
+
+.botonDis:hover {
+    background: #0b6b3e;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+}
+
+.textoUno {
+    margin: 10px;
+}
+
+
+.contenedorLogo {
+    position: fixed;
+    width: 98%;
+    display: flex;
+    justify-content: center;
+
+}
+
+.logoEstilo {
+    width: 50px;
+
+}
+
+.headerEstilo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    background-color: #0b6b3edc;
+    backdrop-filter: blur(5px);
+    width: 100%;
+    height: 50px;
+}

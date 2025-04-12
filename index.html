@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROYECTO</title>
+    <link rel="stylesheet" href="style.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        .errorMensaje {
+            color: red;
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .errorCampo {
+            color: red;
+            font-size: 14px;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="headerEstilo">
+        <p class="textoUno">Bacanora la Sierra</p>
+        <div class="contenedorLogo">
+            <img src="https://cdn-icons-png.flaticon.com/512/205/205164.png" alt="agaveLogo" class="logoEstilo">
+        </div>
+        <div class="contenedorBoton">
+            <a href="nada.html"><button class="botonDis">Configuración</button></a>
+        </div>
+    </header>
+
+    <div class="contenedorPr">
+        <h2 class="inicioText">Iniciar sesión</h2>
+
+        <div class="fondo pos">
+            <form id="loginForm" class="formDis" novalidate>
+                <label for="usuario" class="labelDis">Nombre</label>
+                <input type="text" id="usuario" placeholder="Ingresa el nombre" class="inputDis">
+                <div id="errorUsuario" class="errorCampo"></div>
+
+                <label for="contrasena" class="labelDis">Contraseña</label>
+                <input type="password" id="contrasena" placeholder="Ingresa la contraseña" class="inputDis">
+                <div id="errorContrasena" class="errorCampo"></div>
+
+                <div id="mensajeError" class="errorMensaje" style="display: none;"></div>
+
+                <div class="boton-container">
+                    <button type="submit" class="botonDis">Iniciar sesión</button>
+                </div>
+            </form>
+
+            <div class="contenedorRedes">
+                <div class="posSlogUno">
+                    <p class="slogUno">¡Contacta con nosotros!</p>
+                </div>
+
+                <div class="redesEst wha">
+                    <i class='bx bxl-whatsapp iconPos'>
+                        <a href="https://web.whatsapp.com/"><button class="botonRedes"></button></a>
+                    </i>
+                </div>
+
+                <div class="redesEst facebook">
+                    <i class='bx bxl-facebook iconPos'>
+                        <a href="https://www.facebook.com/login/"><button class="botonRedes"></button></a>
+                    </i>
+                </div>
+
+                <div class="redesEst twitter">
+                    <i class='bx bxl-twitter iconPos'>
+                        <a href="https://x.com/"><button class="botonRedes"></button></a>
+                    </i>
+                </div>
+
+                <div class="redesEst instagram">
+                    <i class='bx bxl-instagram iconPos'>
+                        <a href="https://www.instagram.com/"><button class="botonRedes"></button></a>
+                    </i>
+                </div>
+            </div>
+
+            <div class="contenedorRegistro ">
+                <button class="estiloRegistro">Registrarse</button>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="modalRegistro" class="fondoDos">
+        <div style="background: rgb(1, 87, 51); padding: 20px; border-radius: 10px; width: 300px; box-shadow: 0 4px 10px rgba(0, 255, 13, 0.3); 
+            position: relative; display: flex; flex-direction: column;">
+            <h3 style="text-align: center;">Registro de Usuario</h3>
+
+            <label for="nuevoUsuario">Nombre:</label>
+            <input type="text" id="nuevoUsuario" class="inputDisDos" placeholder="Nuevo nombre">
+            <div id="errorNuevoUsuario" class="errorCampo"></div>
+
+            <label for="nuevaContrasena">Contraseña:</label>
+            <input type="password" id="nuevaContrasena" class="inputDisDos" placeholder="Nueva contraseña">
+            <div id="errorNuevaContrasena" class="errorCampo"></div>
+
+            <button id="btnGuardarRegistro" class="botonDis" style="margin-top: 10px;">Guardar</button>
+            <button onclick="cerrarModal()" class="botonDis" style="background-color: #aaa; margin-top: 10px;">Cancelar</button>
+        </div>
+    </div>
+
+    <script>
+        // Inicializar un usuario si no hay aún
+        if (!localStorage.getItem('usuarios')) {
+            const usuariosIniciales = [{ usuario: 'memo', contrasena: 'memo' }];
+            localStorage.setItem('usuarios', JSON.stringify(usuariosIniciales));
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        const mensajeError = document.getElementById('mensajeError');
+        const errorUsuario = document.getElementById('errorUsuario');
+        const errorContrasena = document.getElementById('errorContrasena');
+        const modal = document.getElementById('modalRegistro');
+        const btnGuardarRegistro = document.getElementById('btnGuardarRegistro');
+
+        document.querySelector('.estiloRegistro').addEventListener('click', function () {
+            modal.style.display = 'flex'; // Muestra el modal
+        });
+
+        function cerrarModal() {
+            modal.style.display = 'none'; // Oculta el modal
+            document.getElementById('nuevoUsuario').value = '';
+            document.getElementById('nuevaContrasena').value = '';
+            document.getElementById('errorNuevoUsuario').textContent = '';
+            document.getElementById('errorNuevaContrasena').textContent = '';
+        }
+
+        loginForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const usuario = document.getElementById('usuario').value.trim();
+            const contrasena = document.getElementById('contrasena').value.trim();
+
+            errorUsuario.textContent = '';
+            errorContrasena.textContent = '';
+            mensajeError.style.display = 'none';
+
+            if (usuario === '') {
+                errorUsuario.textContent = 'El nombre es obligatorio!. 😐';
+                return;
+            }
+
+            if (contrasena === '') {
+                errorContrasena.textContent = 'La contraseña es obligatoria!. 😐';
+                return;
+            }
+
+            const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+            const usuarioValido = usuarios.find(user => user.usuario === usuario && user.contrasena === contrasena);
+
+            if (usuarioValido) {
+                mensajeError.style.display = 'none';
+                window.location.href = "menuPrincipal.html";
+            } else {
+                mensajeError.innerHTML = 'Usuario o contraseña incorrectos. 😥';
+                mensajeError.style.display = 'block';
+            }
+        });
+
+        btnGuardarRegistro.addEventListener('click', function () {
+            const nuevoUsuario = document.getElementById('nuevoUsuario').value.trim();
+            const nuevaContrasena = document.getElementById('nuevaContrasena').value.trim();
+            const errorNuevoUsuario = document.getElementById('errorNuevoUsuario');
+            const errorNuevaContrasena = document.getElementById('errorNuevaContrasena');
+
+            errorNuevoUsuario.textContent = '';
+            errorNuevaContrasena.textContent = '';
+
+            // Validación de nombre de usuario
+            if (nuevoUsuario === '') {
+                errorNuevoUsuario.textContent = 'El nombre es obligatorio.';
+                return;
+            }
+
+            // Validación de contraseña con expresión regular
+            const contrasenaRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            if (nuevaContrasena === '') {
+                errorNuevaContrasena.textContent = 'La contraseña es obligatoria.';
+                return;
+            }
+
+            if (!contrasenaRegex.test(nuevaContrasena)) {
+                errorNuevaContrasena.textContent = 'La contraseña debe tener al menos 6 caracteres, incluir una letra mayúscula, una letra minúscula y un número.';
+                return;
+            }
+
+            let usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+            // Validación de si el usuario ya existe
+            if (usuarios.some(u => u.usuario === nuevoUsuario)) {
+                errorNuevoUsuario.textContent = 'Este usuario ya existe.';
+                return;
+            }
+
+            usuarios.push({ usuario: nuevoUsuario, contrasena: nuevaContrasena });
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+            alert("¡Usuario registrado con éxito!");
+            cerrarModal();
+        });
+    </script>
+</body>
+
+</html>

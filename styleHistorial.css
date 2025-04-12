@@ -1,0 +1,114 @@
+body{
+    background-attachment: fixed;
+    background: url(https://barman.news/wp-content/uploads/2023/06/shutterstock_1871957842-2-scaled.webp);
+    margin: 0;
+    padding: 0;
+    height: 97vh;
+    width: 98vw;
+    background-repeat: no-repeat;
+    background-position: center -70px;
+
+
+    color: rgb(255, 255, 255);
+    
+
+}
+
+.headerEstilo{
+    position: fixed;
+    display: flex;
+    align-items: center;
+    background-color: #0b6b3edc;
+    backdrop-filter: blur(5px);
+    margin-top: 0px;
+    width: 100%;
+    height: 50px;
+    z-index: 2;
+}
+
+.textoUno{
+    margin: 10px;
+}
+
+
+.contenedorLogo{
+    position: fixed;
+    width: 98%;
+    display: flex;
+    justify-content: center;
+    
+}
+
+.logoEstilo{
+    width: 50px;
+
+}
+
+.contenedorBoton{
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    
+}
+
+.botonDis{
+    position: relative;
+    padding: 7px;
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: rgba(63, 63, 63, 0.548);
+    color: white;
+    border: solid 1px rgb(0, 0, 0);
+    cursor: pointer;
+    transition: all ease 0.3s;
+    margin: 10px;
+
+
+    
+}
+
+
+.botonDis:hover {
+    background: #0b6b3e;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+}
+
+.lista-container {
+    width: 600px;  /* Ancho fijo */
+    height: 500px; /* Alto fijo */
+    border: 2px solid #ccc;
+    overflow-y: auto;  /* Activa el scroll vertical */
+    padding: 10px;
+    background: #f9f9f9;
+    background-color: #0b6b3eda;
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+}
+
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+li:last-child {
+    border-bottom: none;
+}
+
+.contenedor{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}

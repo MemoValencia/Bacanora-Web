@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos de Bacanora</title>
+    <link rel="stylesheet" href="tabla.css">
+    <style>
+        .mensaje-error {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header class="headerEstilo">
+        <p class="textoUno">Tabla de productos</p>
+        <div class="contenedorLogo">
+            <img src="https://cdn-icons-png.flaticon.com/512/205/205164.png" alt="agaveLogo" class="logoEstilo">
+        </div>
+        <div class="contenedorBoton">
+            <a href="historialPagina.html"><button class="botonDis">Ventas</button></a>
+            <a href="registroPagina.html"><button class="botonDis">Registrar</button></a>
+            <a href="menuPrincipal.html"><button class="botonDis">Regresar</button></a>
+        </div>
+    </header>
+
+    <form id="formProducto" novalidate>
+        <div class="campo-formulario">
+            <input type="text" id="nombre" placeholder="Nombre del producto" required>
+            <span id="errorNombre" class="mensaje-error">Ingresa un nombre válido.</span>
+        </div>
+        
+        <div class="campo-formulario">
+            <div class="fila-tipos">
+                <select id="tipo" required></select>
+                <button type="button" id="agregarTipo">+ Tipo</button>
+                <button type="button" id="eliminarTipo">Eliminar Tipo</button>
+            </div>
+            <span id="errorTipo" class="mensaje-error">Selecciona un tipo de Bacanora.</span>
+        </div>
+        
+        <div class="campo-formulario">
+            <input type="number" id="precio" placeholder="Precio" min="0" required>
+            <span id="errorPrecio" class="mensaje-error">Ingresa un precio válido (mayor o igual a 0).</span>
+        </div>
+        
+
+        <button type="submit" id="btnGuardar">Agregar</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Tipo</th>
+                <th>Precio</th>
+                <th>Acciones Producto</th>
+            </tr>
+        </thead>
+        <tbody id="productos"></tbody>
+    </table>
+
+    <script>
+        const productosDefault = [
+            { nombre: "Bacanora Blanco", tipo: "Blanco", precio: 350 },
+            { nombre: "Bacanora Reposado", tipo: "Reposado", precio: 450 },
+            { nombre: "Bacanora Añejo", tipo: "Añejo", precio: 600 }
+        ];
+
+        const tiposDefault = ["Añejo", "Reposado", "Blanco"];
+        let editandoIndex = null;
+
+        const inputNombre = document.getElementById("nombre");
+        const inputTipo = document.getElementById("tipo");
+        const inputPrecio = document.getElementById("precio");
+
+        const errorNombre = document.getElementById("errorNombre");
+        const errorTipo = document.getElementById("errorTipo");
+        const errorPrecio = document.getElementById("errorPrecio");
+
+        function cargarProductos() {
+            let productos = JSON.parse(localStorage.getItem("productos"));
+            if (!productos) {
+                localStorage.setItem("productos", JSON.stringify(productosDefault));
+                productos = productosDefault;
+            }
+            return productos;
+        }
+
+        function guardarProductos(productos) {
+            localStorage.setItem("productos", JSON.stringify(productos));
+        }
+
+        function cargarTipos() {
+            let tipos = JSON.parse(localStorage.getItem("tipos"));
+            if (!tipos) {
+                localStorage.setItem("tipos", JSON.stringify(tiposDefault));
+                tipos = tiposDefault;
+            }
+            return tipos;
+        }
+
+        function guardarTipos(tipos) {
+            localStorage.setItem("tipos", JSON.stringify(tipos));
+        }
+
+        function mostrarTipos() {
+            inputTipo.innerHTML = '<option value="">Selecciona tipo</option>';
+            const tipos = cargarTipos();
+            tipos.forEach(tipo => {
+                const option = document.createElement("option");
+                option.value = tipo;
+                option.textContent = tipo;
+                inputTipo.appendChild(option);
+            });
+        }
+
+        function mostrarProductos() {
+            const lista = document.getElementById("productos");
+            lista.innerHTML = "";
+            const productos = cargarProductos();
+            productos.forEach((p, index) => {
+                const fila = document.createElement("tr");
+                fila.innerHTML = `
+                    <td>${p.nombre}</td>
+                    <td>${p.tipo}</td>
+                    <td>$${p.precio.toFixed(2)}</td>
+                    <td>
+                        <button class="btn-eliminar" onclick="eliminarProducto(${index})">Eliminar</button>
+                        <button class="btn-editar" onclick="editarProducto(${index})">Editar</button>
+                    </td>
+                `;
+                lista.appendChild(fila);
+            });
+        }
+
+        function eliminarProducto(index) {
+            let productos = cargarProductos();
+            productos.splice(index, 1);
+            guardarProductos(productos);
+            mostrarProductos();
+        }
+
+        function editarProducto(index) {
+            const productos = cargarProductos();
+            const producto = productos[index];
+            inputNombre.value = producto.nombre;
+            inputTipo.value = producto.tipo;
+            inputPrecio.value = producto.precio;
+            editandoIndex = index;
+            document.getElementById("btnGuardar").textContent = "Actualizar";
+        }
+
+        document.getElementById("formProducto").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const nombre = inputNombre.value.trim();
+            const tipo = inputTipo.value;
+            const precio = parseFloat(inputPrecio.value);
+            let valido = true;
+
+            // Validaciones
+            if (nombre === "") {
+                errorNombre.style.display = "inline";
+                valido = false;
+            } else {
+                errorNombre.style.display = "none";
+            }
+
+            if (tipo === "") {
+                errorTipo.style.display = "inline";
+                valido = false;
+            } else {
+                errorTipo.style.display = "none";
+            }
+
+            if (isNaN(precio) || precio < 0) {
+                errorPrecio.style.display = "inline";
+                valido = false;
+            } else {
+                errorPrecio.style.display = "none";
+            }
+
+            if (!valido) return;
+
+            const productos = cargarProductos();
+            const nuevoProducto = { nombre, tipo, precio };
+
+            if (editandoIndex !== null) {
+                productos[editandoIndex] = nuevoProducto;
+                editandoIndex = null;
+                document.getElementById("btnGuardar").textContent = "Agregar";
+            } else {
+                productos.push(nuevoProducto);
+            }
+
+            guardarProductos(productos);
+            mostrarProductos();
+            this.reset();
+        });
+
+        document.getElementById("agregarTipo").addEventListener("click", function () {
+            const nuevoTipo = prompt("Ingresa un nuevo tipo de Bacanora:");
+            if (nuevoTipo) {
+                let tipos = cargarTipos();
+                if (!tipos.includes(nuevoTipo)) {
+                    tipos.push(nuevoTipo);
+                    guardarTipos(tipos);
+                    mostrarTipos();
+                    alert(`Tipo "${nuevoTipo}" agregado correctamente.`);
+                } else {
+                    alert("Ese tipo ya existe.");
+                }
+            }
+        });
+
+        document.getElementById("eliminarTipo").addEventListener("click", function () {
+            const tipoAEliminar = prompt("Escribe el nombre del tipo que deseas eliminar:");
+            if (tipoAEliminar) {
+                let tipos = cargarTipos();
+                if (tipos.includes(tipoAEliminar)) {
+                    tipos = tipos.filter(t => t !== tipoAEliminar);
+                    guardarTipos(tipos);
+                    mostrarTipos();
+                    alert(`Tipo "${tipoAEliminar}" eliminado correctamente.`);
+                } else {
+                    alert("Ese tipo no existe.");
+                }
+            }
+        });
+
+        mostrarProductos();
+        mostrarTipos();
+    </script>
+</body>
+
+</html>

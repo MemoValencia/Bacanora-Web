@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Ventas</title>
+    <link rel="stylesheet" href="styleRegistro.css">
+    <style>
+        .mensaje-error {
+            color: red;
+            font-size: 0.9em;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="headerEstilo">
+        <p class="textoUno">Registro de ventas</p>
+        <div class="contenedorLogo">
+            <img src="https://cdn-icons-png.flaticon.com/512/205/205164.png" alt="agaveLogo" class="logoEstilo">
+        </div>
+        <div class="contenedorBoton">
+            <a href="tablaProducto.html"><button class="botonDis">Productos</button></a>
+            <a href="historialPagina.html"><button class="botonDis">Ventas</button></a>
+            <a href="menuPrincipal.html"><button class="botonDis">Regresar</button></a>
+        </div>
+    </header>
+
+    <div class="conte">
+        <div class="formulario">
+            <form id="formVenta" novalidate>
+                <label for="producto">Producto:</label><br>
+                <select id="producto" required>
+                    <option value="">-- Selecciona un producto --</option>
+                </select>
+                <span id="errorProducto" class="mensaje-error">Selecciona un producto válido.</span>
+                <br><br>
+
+                <label for="precio">Precio Unitario (MXN):</label><br>
+                <input type="number" id="precio" readonly required><br><br>
+
+                <label for="cantidad">Cantidad:</label><br>
+                <input type="number" id="cantidad" min="1" required>
+                <span id="errorCantidad" class="mensaje-error">Ingresa una cantidad válida (mayor a 0).</span>
+                <br><br>
+
+                <label for="precioTotal">Precio Total (MXN):</label><br>
+                <input type="text" id="precioTotal" readonly required><br><br>
+
+                <input type="text" id="comprador" placeholder="Nombre del comprador" required>
+                <span id="errorComprador" class="mensaje-error">El nombre del comprador no puede estar vacío.</span>
+                <br><br>
+
+                <button type="submit">Guardar Venta</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const selectProducto = document.getElementById("producto");
+        const inputPrecio = document.getElementById("precio");
+        const inputCantidad = document.getElementById("cantidad");
+        const inputPrecioTotal = document.getElementById("precioTotal");
+        const inputComprador = document.getElementById("comprador");
+        const form = document.getElementById("formVenta");
+
+        const errorProducto = document.getElementById("errorProducto");
+        const errorCantidad = document.getElementById("errorCantidad");
+        const errorComprador = document.getElementById("errorComprador");
+
+        let productos = [];
+
+        function cargarProductos() {
+            productos = JSON.parse(localStorage.getItem("productos")) || [];
+            productos.forEach((p, index) => {
+                const option = document.createElement("option");
+                option.value = index;
+                option.textContent = `${p.nombre} (${p.tipo})`;
+                selectProducto.appendChild(option);
+            });
+        }
+
+        selectProducto.addEventListener("change", () => {
+            const selectedIndex = selectProducto.value;
+            if (selectedIndex !== "") {
+                const productoSeleccionado = productos[selectedIndex];
+                inputPrecio.value = productoSeleccionado.precio;
+                errorProducto.style.display = "none";
+                actualizarTotal();
+            } else {
+                inputPrecio.value = "";
+                inputPrecioTotal.value = "";
+            }
+        });
+
+        inputCantidad.addEventListener("input", () => {
+            actualizarTotal();
+            errorCantidad.style.display = "none";
+        });
+
+        inputComprador.addEventListener("input", () => {
+            errorComprador.style.display = "none";
+        });
+
+        function actualizarTotal() {
+            const cantidad = parseInt(inputCantidad.value);
+            const precioUnitario = parseFloat(inputPrecio.value);
+            if (!isNaN(cantidad) && !isNaN(precioUnitario)) {
+                const total = cantidad * precioUnitario;
+                inputPrecioTotal.value = total.toFixed(2);
+            } else {
+                inputPrecioTotal.value = "";
+            }
+        }
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            let valido = true;
+            const selectedIndex = selectProducto.value;
+            const cantidad = parseInt(inputCantidad.value);
+            const precioUnitario = parseFloat(inputPrecio.value);
+            const comprador = inputComprador.value.trim();
+
+            // Validación del producto
+            if (selectedIndex === "") {
+                errorProducto.style.display = "inline";
+                valido = false;
+            }
+
+            // Validación de la cantidad
+            if (isNaN(cantidad) || cantidad <= 0) {
+                errorCantidad.style.display = "inline";
+                valido = false;
+            }
+
+            // Validación del comprador
+            if (comprador === "") {
+                errorComprador.style.display = "inline";
+                valido = false;
+            }
+
+            if (!valido) return;
+
+            const total = precioUnitario * cantidad;
+            const productoSeleccionado = productos[selectedIndex];
+
+            const nuevaVenta = {
+                producto: `${productoSeleccionado.nombre} (${productoSeleccionado.tipo})`,
+                precioUnitario,
+                cantidad,
+                total,
+                comprador
+            };
+
+            const historial = JSON.parse(localStorage.getItem("ventas")) || [];
+            historial.push(nuevaVenta);
+            localStorage.setItem("ventas", JSON.stringify(historial));
+
+            alert(`Venta registrada con éxito.\nTotal: $${total.toFixed(2)}`);
+            form.reset();
+            inputPrecio.value = "";
+            inputPrecioTotal.value = "";
+            errorProducto.style.display = "none";
+            errorCantidad.style.display = "none";
+            errorComprador.style.display = "none";
+        });
+
+        cargarProductos();
+    </script>
+</body>
+</html>
